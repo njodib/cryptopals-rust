@@ -1,0 +1,18 @@
+[package]
+name = "solutions"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+name = "challenges"
+path = "src/lib.rs"
+
+[[bin]]
+name = "challenges"
+path = "src/main.rs"
+
+[dependencies]
+base64_light = "0.1.5"
+hex = "0.4.3"
