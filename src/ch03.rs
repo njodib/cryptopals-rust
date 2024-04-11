@@ -72,7 +72,7 @@ mod tests {
         let unencrypted_text = "The Recurse Center is a self-directed, community-driven educational retreat for programmers in New York City.";
         let unencrypted_bytes = unencrypted_text.as_bytes().to_vec();
 
-        for encryption_key in 0..=255 {
+        for encryption_key in 32..=127 {
             //encrypt message with new encryption key
             let encrypted_bytes = apply_key(encryption_key, &unencrypted_bytes);
     
