@@ -1,5 +1,5 @@
-use crate::ch03::decrypt_single_xor;
-
+use crate::ch03::{decrypt_single_xor, best_key, apply_key};
+use crate::ch05::apply_repeating_xor;
 use base64_light::base64_decode;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
@@ -53,50 +53,17 @@ fn transposed_blocks(encrypted: &[u8], size: usize) -> Vec<Vec<u8>> {
     transposed_blocks
 }
 
-fn distranspose_blocks(mut blocks: Vec<Vec<u8>>, message_size: u32, keysize: u32) -> Vec<u8> {
-    //create our output Vector
-    let mut output: Vec<u8> = Vec::new();
-
-    //first find the block with the 'last letter'
-    let last_block: u8 = match message_size % keysize {
-        0 => (keysize-1) as u8,
-        _ => ((message_size % keysize) - 0) as u8,
-    };
-
-    //start at the block with the last letters, and pop into the output until the remaining blocks are equally-sized
-    for i in (0..last_block).rev() {
-        output.push(blocks[i as usize].pop().unwrap());
-    }
-
-    //cycle down the vector, popping elements
-    let num_elements_to_pop = message_size - (last_block as u32);
-    let num_elements_in_block = num_elements_to_pop / keysize;
-
-    for _ in 0..num_elements_in_block {
-        for block in (0..keysize).rev() { //keysize = num blocks
-            output.push(blocks[block as usize].pop().unwrap())
-        }
-    }
-
-    //output the vector with popped elements in reverse
-    let output_reverse: Vec<u8> = output.iter().copied().rev().collect();
-    output_reverse
-    
-}
-
-
-fn decrypt_message_for_keysize(encrypted: &[u8], keysize: usize) -> Vec<u8> {
-    let mut solved_blocks: Vec<Vec<u8>> = Vec::new();
-    for block in transposed_blocks(encrypted, keysize) {
-        solved_blocks.push(decrypt_single_xor(&block));
-    }
-    distranspose_blocks(solved_blocks, encrypted.len() as u32, keysize as u32)
-}
-
+//transpose and apply the 'single xor key' finder on all transposed parts
+//apply collected key over whole encrypoted chain
 fn decrypt_repeating_xor(encrypted: &[u8]) -> Vec<u8> {
     let keysize = best_keysize(&encrypted);
-    decrypt_message_for_keysize(&encrypted, keysize)
+    let blocks = transposed_blocks(&encrypted, keysize);
+    let encryption_key: Vec<u8> = blocks.iter().map(|block| best_key(&block)).collect();
+    let decrypted = apply_repeating_xor(&encryption_key, encrypted);
+    decrypted
 }
+
+
 
 pub fn print() {
     let mut content = String::new();
