@@ -16,20 +16,10 @@ fn hamming_distance(b1: &[u8], b2: &[u8]) -> u32{
 //score as hamming distance between first keysize bytes and second keysize bytes
 //the more hamming sizes to calculate the better
 fn score_keysize(encrypted: &[u8], keysize: usize) -> u32 {
-    //i don't wanna hear anyone making fun of how i wrote this method, i promise i'll refactor it later
-    let h1 = hamming_distance(&encrypted[0..keysize], &encrypted[keysize..(2*keysize)]);
-    let h2 = hamming_distance(&encrypted[keysize..(2*keysize)], &encrypted[(2*keysize)..(3*keysize)]);
-    let h3 = hamming_distance(&encrypted[(2*keysize)..(3*keysize)], &encrypted[(3*keysize)..(4*keysize)]);
-    let h4 = hamming_distance(&encrypted[(3*keysize)..(4*keysize)], &encrypted[(4*keysize)..(5*keysize)]);
-    let h5 = hamming_distance(&encrypted[(4*keysize)..(5*keysize)], &encrypted[(5*keysize)..(6*keysize)]);
-    let h6 = hamming_distance(&encrypted[(5*keysize)..(6*keysize)], &encrypted[(6*keysize)..(7*keysize)]);
-    let h7 = hamming_distance(&encrypted[(6*keysize)..(7*keysize)], &encrypted[(7*keysize)..(8*keysize)]);
-    let h8 = hamming_distance(&encrypted[(7*keysize)..(8*keysize)], &encrypted[(8*keysize)..(9*keysize)]);
-    let h9 = hamming_distance(&encrypted[(8*keysize)..(9*keysize)], &encrypted[(9*keysize)..(10*keysize)]);
-    let h10 = hamming_distance(&encrypted[(9*keysize)..(10*keysize)], &encrypted[(10*keysize)..(11*keysize)]);
-    let h11 = hamming_distance(&encrypted[(10*keysize)..(11*keysize)], &encrypted[(11*keysize)..(12*keysize)]);
-    let h12 = hamming_distance(&encrypted[(11*keysize)..(12*keysize)], &encrypted[(12*keysize)..(13*keysize)]);
-    h1 + h2 + h3 + h4 + h5 + h6 + h7 + h8 + h9 + h10 + h11 + h12
+    (0..=12)
+    .into_iter()
+    .map(|i| hamming_distance(&encrypted[(i*keysize)..((i+1)*keysize)], &encrypted[((i+1)*keysize)..((i+2)*keysize)]))
+    .sum()
 }
 
 //best keysize minimizes keysize score
