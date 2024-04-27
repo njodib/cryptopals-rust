@@ -1,4 +1,4 @@
-use crate::ch03::{decrypt_single_xor, best_key, apply_key};
+use crate::ch03::best_single_key;
 use crate::ch05::apply_repeating_xor;
 use base64_light::base64_decode;
 use std::fs::File;
@@ -48,7 +48,7 @@ fn transposed_blocks(encrypted: &[u8], size: usize) -> Vec<Vec<u8>> {
 fn decrypt_repeating_xor(encrypted: &[u8]) -> Vec<u8> {
     let keysize = best_keysize(&encrypted);
     let blocks = transposed_blocks(&encrypted, keysize);
-    let encryption_key: Vec<u8> = blocks.iter().map(|block| best_key(&block)).collect();
+    let encryption_key: Vec<u8> = blocks.iter().map(|block| best_single_key(&block)).collect();
     let decrypted = apply_repeating_xor(&encryption_key, encrypted);
     decrypted
 }

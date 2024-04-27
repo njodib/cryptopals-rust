@@ -2,7 +2,7 @@ use crate::ch01::hex_encode;
 use crate::ch02::fixed_xor;
 
 //single-key XOR
-pub fn apply_key(key: u8, bytes: &[u8]) -> Vec<u8> {
+pub fn apply_single_xor(key: u8, bytes: &[u8]) -> Vec<u8> {
     fixed_xor(bytes, &vec![key;bytes.len()])
 }
 
@@ -21,6 +21,17 @@ const fn score_byte(byte: u8) -> f32 {
     }
 }
 
+// bytes have an exclusive 1 -> 1 mapping function with single XOR
+// XOR function has b^b=0 and b^0=b and (a^b)^c=a^(b^c)
+
+// call unencrypted byte: b. call key k.
+// encrypted byte = b^k
+// thus, (b^k)^k = b^(k^k) = b^0 = b
+// xor
+
+// Assume the unencrypted message is english text
+// The most common bytes in the unencrypted can be looked up
+//
 fn score_key(key: u8, bytes: &[u8]) -> u32{
     bytes
     .iter()
@@ -28,7 +39,7 @@ fn score_key(key: u8, bytes: &[u8]) -> u32{
     .sum::<f32>() as u32
 }
 
-pub fn best_key(encrypted: &[u8]) -> u8 {
+pub fn best_single_key(encrypted: &[u8]) -> u8 {
     (32..=127) //use standard ascii bytes as possible keys
     .into_iter()
     .max_by_key(|key| score_key(*key, &encrypted))
@@ -36,7 +47,7 @@ pub fn best_key(encrypted: &[u8]) -> u8 {
 }
 
 pub fn decrypt_single_xor(encrypted: &[u8]) -> Vec<u8> {
-    apply_key(best_key(&encrypted), &encrypted)
+    apply_single_xor(best_single_key(&encrypted), &encrypted)
 }
 
 pub fn print(){
@@ -46,7 +57,6 @@ pub fn print(){
     println!("ch03: {}", String::from_utf8(decrypted_bytes).unwrap());
 }
 
-//only used outside this challenge?
 pub fn score_english(bytes: &[u8]) -> u32 {
     bytes
     .iter()
@@ -54,14 +64,6 @@ pub fn score_english(bytes: &[u8]) -> u32 {
     .sum::<f32>() as u32
 }
 
-pub fn is_english(bytes: &[u8]) -> bool{
-    //use a 75% threshold -> reduce to 3/4
-    let letters_and_spaces_ct = bytes.iter()
-    .filter(|&&b| (b'a'..=b'z').contains(&b) || b==b' ')
-    .count() * 10 > bytes.len() * 6;
-
-    letters_and_spaces_ct
-}
 
 #[cfg(test)]
 mod tests {
@@ -74,7 +76,7 @@ mod tests {
 
         for encryption_key in 32..=127 {
             //encrypt message with new encryption key
-            let encrypted_bytes = apply_key(encryption_key, &unencrypted_bytes);
+            let encrypted_bytes = apply_single_xor(encryption_key, &unencrypted_bytes);
     
             //decrypt message
             //let decryption_key = best_key(&encrypted_bytes);

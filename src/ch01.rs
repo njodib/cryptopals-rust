@@ -1,4 +1,7 @@
 
+
+// PAPER TO IMPLEMENT: Base 64 encoding/decoding at nearly the speed of a memory copy -- https://arxiv.org/pdf/1910.05109.pdf
+
 pub fn hex_encode(s: &str) -> Vec<u8>{
     (0..s.len())
         .step_by(2)

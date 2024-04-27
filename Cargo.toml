@@ -16,3 +16,6 @@ path = "src/main.rs"
 [dependencies]
 base64_light = "0.1.5"
 hex = "0.4.3"
+aes = "0.8.4"
+base64 = "0.22.0"
+
