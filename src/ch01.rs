@@ -29,6 +29,9 @@ fn hex_to_base64(input_hex: &str) -> String {
     base64_decode(&hex_encode(input_hex))
 }
 
+pub fn hexstring_to_bytes(s: &str) -> Vec<u8>{
+    hex_encode(s)
+}
 
 
 pub fn print() {
