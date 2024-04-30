@@ -15,8 +15,8 @@ fn main() {
     //ch03::print();
     //ch04::print();
     //ch05::print();
-    //ch06::print();
+    ch06::print();
     //ch07::print();
     //ch08::print();
-    ch09::print();
+    //ch09::print();
 }
