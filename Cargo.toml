@@ -18,4 +18,6 @@ base64_light = "0.1.5"
 hex = "0.4.3"
 aes = "0.8.4"
 base64 = "0.22.0"
+openssl = "0.10.64"
+openssl-sys = "0.9.102"
 
