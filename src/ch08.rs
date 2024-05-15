@@ -2,7 +2,7 @@ use std::fs::File;
 use std::io::{BufRead, BufReader};
 
 pub fn print() {
-    let file = File::open(&"src/ch08.txt").unwrap();
+    let file = File::open(&"encrypted/ch08.txt").unwrap();
     let reader = BufReader::new(file);
     let mut line_ct = 0;
     for line in reader.lines() {

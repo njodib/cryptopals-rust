@@ -28,6 +28,6 @@ pub fn decrypt_ch07(path: &str, key_str: &str) -> String {
 }
 
 pub fn print() {
-    let message = decrypt_ch07("src/ch07.txt", "YELLOW SUBMARINE");
+    let message = decrypt_ch07("encrypted/ch07.txt", "YELLOW SUBMARINE");
     println!("{}", message);
 }

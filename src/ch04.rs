@@ -7,7 +7,7 @@ use crate::ch03::{decrypt_single_xor,score_english};
 
 pub fn print() {
     //load txt file for challenge into buffered
-    let path = "src/ch04.txt";
+    let path = "encrypted/ch04.txt";
     let input = File::open(path).unwrap();
     let buffered = BufReader::new(input);
 

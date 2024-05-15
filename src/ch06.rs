@@ -57,7 +57,7 @@ fn decrypt_repeating_xor(encrypted: &[u8]) -> Vec<u8> {
 
 pub fn print() {
     let mut content = String::new();
-    let file = File::open(&"src/ch06.txt").unwrap();
+    let file = File::open(&"encrypted/ch06.txt").unwrap();
     let reader = BufReader::new(file);
     for line in reader.lines() {
         content.push_str(line.unwrap().trim());
