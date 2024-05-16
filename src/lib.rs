@@ -10,3 +10,4 @@ pub mod ch08;
 pub mod ch09;
 
 pub mod utils;
+pub mod xor;
