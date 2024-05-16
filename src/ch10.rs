@@ -3,7 +3,7 @@ use openssl::symm::{Cipher, Crypter, Mode};
 //use ch01::hexstring_to_bytes;
 
 pub fn print()  {
-    //let file = File::open(&"src/ch10.txt").unwrap();
+    //let file = File::open(&"encrypted/ch10.txt").unwrap();
     //let reader = BufReader::new(file);
     //let mut line_ct = 0;
     //for line in reader.lines() {

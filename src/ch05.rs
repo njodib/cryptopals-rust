@@ -1,20 +1,4 @@
-
-fn num_to_hex(digit: u8) -> u8 {
-    match digit {
-        0..=9 => b'0' + digit,
-        10..=16 => b'a' + (digit-10),
-        _ => panic!("number not a hexadecimal")
-    }
-}
-
-fn hex_decode(bytes: &[u8]) -> String {
-    let mut result: Vec<u8> = Vec::with_capacity(bytes.len() * 2);
-    for byte in bytes {
-        result.push(num_to_hex(byte >> 4));
-        result.push(num_to_hex(byte & 0x0F));
-    }
-    String::from_utf8(result).unwrap()
-}
+use crate::utils::hex_encode;
 
 pub fn apply_repeating_xor(encryption_key: &[u8], unencrypted: &[u8]) -> Vec<u8>{
     unencrypted
@@ -40,7 +24,7 @@ pub fn print() {
 
     //check expected encryption is correct
     let encrypted = apply_repeating_xor(encryption_key.as_bytes(), unencrypted.as_bytes());
-    assert_eq!(expected_encryption, hex_decode(&encrypted))
+    assert_eq!(expected_encryption, hex_encode(&encrypted))
 
 
 }
@@ -59,7 +43,7 @@ mod tests {
 
         //check expected encryption is correct
         let encrypted = apply_repeating_xor(encryption_key.as_bytes(), unencrypted.as_bytes());
-        assert_eq!(expected_encryption, hex_decode(&encrypted))
+        assert_eq!(expected_encryption, hex_encode(&encrypted))
 
     }
     #[test]

@@ -1,4 +1,4 @@
-use crate::ch01::hex_encode;
+use crate::utils::hex_decode;
 use crate::ch02::fixed_xor;
 
 //single-key XOR
@@ -52,7 +52,7 @@ pub fn decrypt_single_xor(encrypted: &[u8]) -> Vec<u8> {
 
 pub fn print(){
     let encrypted_hex = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736";
-    let encrypted_bytes = hex_encode(encrypted_hex);
+    let encrypted_bytes = hex_decode(encrypted_hex);
     let decrypted_bytes = decrypt_single_xor(&encrypted_bytes);
     println!("ch03: {}", String::from_utf8(decrypted_bytes).unwrap());
 }
