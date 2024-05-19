@@ -8,7 +8,7 @@ pub fn print() {
     "Burning 'em, if you ain't quick and nimble\nI go crazy when I hear a cymbal";
 
 
-    println!("\nch05:\n{}", unencrypted);
+    println!("{}", unencrypted);
 
     //given from challenge 5
     let encryption_key = "ICE";

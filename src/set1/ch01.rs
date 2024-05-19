@@ -5,5 +5,5 @@ use crate::utils::*;
 pub fn print() {
     //base64 <--> hex <--> ascii methods in utils
     let ch01_hex = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
-    println!("ch01: {}", hex_decode_str(ch01_hex));
+    println!("{}", hex_decode_str(ch01_hex));
 }

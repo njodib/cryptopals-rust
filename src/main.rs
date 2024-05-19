@@ -1,29 +1,23 @@
 use std::env;
 
-use challenges::ch01;
-use challenges::ch02;
-use challenges::ch03;
-use challenges::ch04;
-use challenges::ch05;
-use challenges::ch06;
-use challenges::ch07;
-use challenges::ch08;
-use challenges::ch09;
+use challenges::set1;
+use challenges::set2;
 //use challenges::ch10;
 
 fn main() {
     
     for ch in challenge_indices(9){
+        println!("\nCHALLENGE {} PRINTOUT:", ch);
         match ch {
-             1 => ch01::print(),
-             2 => ch02::print(),
-             3 => ch03::print(),
-             4 => ch04::print(),
-             5 => ch05::print(),
-             6 => ch06::print(),
-             7 => ch07::print(),
-             8 => ch08::print(),
-             9 => ch09::print(),
+             1 => set1::ch01::print(),
+             2 => set1::ch02::print(),
+             3 => set1::ch03::print(),
+             4 => set1::ch04::print(),
+             5 => set1::ch05::print(),
+             6 => set1::ch06::print(),
+             7 => set1::ch07::print(),
+             8 => set1::ch08::print(),
+             9 => set2::ch09::print(),
             //10 => ch10::print(),
             _ => panic!("\nERROR: Tried to run challenge which either doesn't exist or hasn't been implemented.\n")
         }    

@@ -13,5 +13,5 @@ pub fn print() {
         content.push_str(line.unwrap().trim());
     }
     let encrypted = base64_decode(&content);
-    println!("\nch06:\n{}", String::from_utf8(decrypt_xor_multibyte(&encrypted)).unwrap());
+    println!("{}", String::from_utf8(decrypt_xor_multibyte(&encrypted)).unwrap());
 }

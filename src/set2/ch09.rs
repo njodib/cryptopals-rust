@@ -10,5 +10,5 @@ fn pkcs_padding(message: &[u8], block_size: usize) -> Vec<u8>{
 pub fn print() {
     let message = "YELLOW SUBMARINE".as_bytes();
     let block_size = 20;
-    println!("Ch09: {:?}", String::from_utf8(pkcs_padding(&message, block_size)).unwrap());
+    println!("{:?}", String::from_utf8(pkcs_padding(&message, block_size)).unwrap());
 }

@@ -22,7 +22,7 @@ pub fn print() {
             if (i+1..blocks.len())
                 .into_iter()
                 .any(|j| blocks[i] == blocks[j]) {
-                    println!("\nLine {:?} is AES-128 encrypted\n",line_ct); 
+                    println!("Line {:?} is AES-128 encrypted",line_ct); 
                     return;
             }
         }

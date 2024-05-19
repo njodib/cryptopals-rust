@@ -10,5 +10,5 @@ pub fn print() {
     let b2 = hex_decode(&hex2);
     let bxor = apply_xor_fixed(&b1,&b2);
 
-    println!("ch02: {}", String::from_utf8(bxor).unwrap());
+    println!("{}", String::from_utf8(bxor).unwrap());
 }
