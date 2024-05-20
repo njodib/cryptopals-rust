@@ -20,4 +20,5 @@ aes = "0.8.4"
 base64 = "0.22.0"
 openssl = "0.10.64"
 openssl-sys = "0.9.102"
+rand = "0.6.5"
 

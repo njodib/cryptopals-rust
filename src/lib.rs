@@ -4,5 +4,4 @@ pub mod set2;
 
 pub mod utils;
 pub mod xor;
-pub mod aes_algos;
-
+pub mod aes_algs;
