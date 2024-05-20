@@ -1,5 +1,5 @@
 use aes::Aes128;
-use aes::cipher::{generic_array::GenericArray, KeyInit, BlockDecrypt};
+use aes::cipher::{generic_array::GenericArray, KeyInit, BlockDecrypt, BlockEncrypt};
 use crate::xor::fixed_xor;
 
 pub fn aes_ecb_decrypt(encrypted_bytes: &[u8], key_bytes: &[u8]) -> String {
@@ -15,6 +15,22 @@ pub fn aes_ecb_decrypt(encrypted_bytes: &[u8], key_bytes: &[u8]) -> String {
     
     //Decrypt, flatten, output
     cipher.decrypt_blocks(&mut blocks);
+    blocks.iter().flatten().map(|&x| x as char).collect()
+}
+
+pub fn aes_ecb_encrypt(plaintext_bytes: &[u8], key_bytes: &[u8]) -> String {
+    // Construct blocks of 16 byte size for AES-128
+    let mut blocks = Vec::new();
+    (0..plaintext_bytes.len()).step_by(16).for_each(|x| {
+        blocks.push(GenericArray::clone_from_slice(&plaintext_bytes[x..x + 16]));
+    });
+    
+    // Initialize cipher
+    let key = GenericArray::clone_from_slice(key_bytes);
+    let cipher = Aes128::new(&key);
+    
+    //Decrypt, flatten, output
+    cipher.encrypt_blocks(&mut blocks);
     blocks.iter().flatten().map(|&x| x as char).collect()
 }
 
@@ -49,4 +65,29 @@ pub fn aes_cbc_decrypt(encrypted_bytes: &[u8], key_bytes: &[u8], iv_bytes: &[u8]
     
     //Output as a string from decrypted bytes
     String::from_utf8(decrypted).unwrap()
+}
+
+pub fn aes_cbc_encrypt(plaintext_bytes: &[u8], key_bytes: &[u8], iv_bytes: &[u8]) -> String {
+    //Initialize cipher as AES-128 with key and iv
+    let key = GenericArray::clone_from_slice(key_bytes);
+    let cipher = Aes128::new(&key);
+    let mut iv = iv_bytes.to_vec();
+    
+    //Encrypted bytes from Base 64 decoding of ch10 file, build decrypted
+    let mut blocks: Vec<u8> = Vec::new();
+
+    //Step through encrypted bytes as a block of 16 bytes (4x4 matrix)
+    (0..plaintext_bytes.len()).step_by(16).for_each(|x| {
+        let plaintext: Vec<u8> = fixed_xor(&iv, &plaintext_bytes[x..x + 16].to_vec());
+        let mut block = GenericArray::clone_from_slice(&plaintext);
+        cipher.encrypt_block(&mut block);
+        iv = Vec::new();
+        for byte in block{
+            blocks.push(byte);
+            iv.push(byte);
+        }
+    });
+    
+    //Output as a string from decrypted bytes
+    blocks.iter().map(|&x| x as char).collect()
 }
