@@ -97,11 +97,6 @@ fn best_single_key(encrypted: &[u8]) -> u8 {
     .unwrap() //all scores at least 0 on non-ascii chars
 }
 
-fn decrypt_single_xor(encrypted: &[u8]) -> Vec<u8> {
-    apply_xor_singlebyte(best_single_key(&encrypted), &encrypted)
-}
-
-
 fn apply_repeating_xor(encryption_key: &[u8], unencrypted: &[u8]) -> Vec<u8>{
     unencrypted
         .iter()

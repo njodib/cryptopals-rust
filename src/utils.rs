@@ -36,7 +36,7 @@ pub fn hex_encode(bytes: &[u8]) -> String {
 }
 
 //ascii bytes -> base64 string
-fn base64_encode(bytes: &[u8]) -> String {
+pub fn base64_encode(bytes: &[u8]) -> String {
     let base64: Vec<char> =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".chars().collect();
 
@@ -52,8 +52,12 @@ fn base64_encode(bytes: &[u8]) -> String {
 }
 
 
-fn hex_to_base64(input_hex: &str) -> String {
+pub fn hex_to_base64(input_hex: &str) -> String {
     base64_encode(&hex_decode(input_hex))
+}
+
+pub fn base64_to_hex(input_hex: &str) -> String {
+    hex_encode(&base64_decode(input_hex))
 }
 
 //TODO: TESTS
