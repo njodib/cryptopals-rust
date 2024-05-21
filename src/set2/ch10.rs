@@ -1,6 +1,6 @@
 use base64_light::base64_decode;
 use std::fs;
-use crate::aes_algs::{aes_cbc_decrypt, aes_cbc_encrypt};
+use crate::aes_algs::aes_cbc_decrypt;
 
 fn read_bytes(path: &str) -> Vec<u8> {
     let base64_s = fs::read_to_string(path)
@@ -15,7 +15,8 @@ pub fn print() {
     let iv = [0 as u8; 16];
 
     let m1 = aes_cbc_decrypt(&encrypted, &key.as_bytes(), &iv);
-    let m2 = aes_cbc_encrypt(&encrypted, &key.as_bytes(), &iv);
-    let m3 = aes_cbc_decrypt(&encrypted, &key.as_bytes(), &iv);
-    println!("{}", m3);
+    //check decryption AND encryption
+    //let m2 = aes_cbc_encrypt(&encrypted, &key.as_bytes(), &iv);
+    //let m3 = aes_cbc_decrypt(&encrypted, &key.as_bytes(), &iv);
+    println!("{}", String::from_utf8(m1).unwrap());
 }
