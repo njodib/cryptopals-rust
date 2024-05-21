@@ -1,6 +1,6 @@
 use std::fs::File;
 use std::io::{BufRead, BufReader};
-use crate::aes_algs::{aes_ecb_decrypt, is_aes_ecb_encrypted};
+use crate::aes_algs::is_aes_ecb_encrypted;
 
 pub fn print() {
     let file = File::open(&"encrypted/ch08.txt").unwrap();

@@ -22,7 +22,7 @@ pub fn aes_ecb_decrypt(encrypted_bytes: &[u8], key_bytes: &[u8]) -> Vec<u8> {
 pub fn aes_ecb_encrypt(plaintext_bytes: &[u8], key_bytes: &[u8]) -> Vec<u8> {
     // Construct blocks of 16 byte size for AES-128
     let mut blocks = Vec::new();
-    (0..plaintext_bytes.len()).step_by(16).for_each(|x| {
+    (0..((plaintext_bytes.len()/16) as usize)).step_by(16).for_each(|x| {
         blocks.push(GenericArray::clone_from_slice(&plaintext_bytes[x..x + 16]));
     });
     
@@ -61,9 +61,7 @@ pub fn is_aes_ecb_encrypted(l: &[u8]) -> bool {
                 return true;
         }
     }
-    return false
-    
-
+    return false;
 }
 
 pub fn aes_cbc_decrypt(encrypted_bytes: &[u8], key_bytes: &[u8], iv_bytes: &[u8]) -> Vec<u8> {
@@ -110,7 +108,7 @@ pub fn aes_cbc_encrypt(plaintext_bytes: &[u8], key_bytes: &[u8], iv_bytes: &[u8]
     let mut blocks: Vec<u8> = Vec::new();
 
     //Step through encrypted bytes as a block of 16 bytes (4x4 matrix)
-    (0..plaintext_bytes.len()).step_by(16).for_each(|x| {
+    (0..((plaintext_bytes.len()/16) as usize)).step_by(16).for_each(|x| {
         let plaintext: Vec<u8> = fixed_xor(&iv, &plaintext_bytes[x..x + 16].to_vec());
         let mut block = GenericArray::clone_from_slice(&plaintext);
         cipher.encrypt_block(&mut block);
