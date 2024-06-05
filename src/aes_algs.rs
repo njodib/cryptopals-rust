@@ -1,6 +1,7 @@
 use aes::Aes128;
 use aes::cipher::{generic_array::GenericArray, KeyInit, BlockDecrypt, BlockEncrypt};
 use crate::xor::fixed_xor;
+use crate::utils::hex_encode;
 
 
 pub fn aes_ecb_decrypt(encrypted_bytes: &[u8], key_bytes: &[u8]) -> Vec<u8> {
@@ -58,7 +59,8 @@ pub fn is_aes_ecb_encrypted(l: &[u8]) -> bool {
     //compare blocks. if any blocks are equal, it is ECB encrypted
     for i in 0..blocks.len() {
         if (i+1..blocks.len()).into_iter().any(|j| blocks[i] == blocks[j]) {
-                return true;
+            println!("The repeating block is: {:?}", hex_encode(&blocks[i])); 
+            return true;
         }
     }
     return false;
@@ -121,6 +123,13 @@ pub fn aes_cbc_encrypt(plaintext_bytes: &[u8], key_bytes: &[u8], iv_bytes: &[u8]
     
     //Output as a string from decrypted bytes
     blocks.iter().map(|&x| x as u8).collect()
+}
+
+pub fn find_aes_encryption_mode(encrypted: &[u8]) -> String{
+    match is_aes_ecb_encrypted(encrypted){
+        true => "ECB".to_string(),
+        false => "CBC".to_string(),
+    }
 }
 
 #[cfg(test)]
