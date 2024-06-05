@@ -6,7 +6,7 @@ use challenges::set2;
 
 fn main() {
     
-    for ch in challenge_indices(12){
+    for ch in challenge_indices(13){
         println!("\nCHALLENGE {} PRINTOUT:", ch);
         match ch {
              1 => set1::ch01::print(),
@@ -21,6 +21,7 @@ fn main() {
             10 => set2::ch10::print(),
             11 => set2::ch11::print(),
             12 => set2::ch12::print(),
+            13 => set2::ch13::print(),
             _ => panic!("\nERROR: Tried to run challenge which either doesn't exist or hasn't been implemented.\n")
         }    
     }
