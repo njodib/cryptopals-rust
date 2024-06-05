@@ -2,6 +2,7 @@ use aes::Aes128;
 use aes::cipher::{generic_array::GenericArray, KeyInit, BlockDecrypt, BlockEncrypt};
 use crate::xor::fixed_xor;
 use crate::utils::hex_encode;
+use std::collections::HashMap;
 
 pub fn aes_ecb_decrypt(encrypted_bytes: &[u8], key_bytes: &[u8]) -> Vec<u8> {
     // Construct blocks of 16 byte size for AES-128
@@ -141,6 +142,51 @@ fn pkcs_padding(message: &[u8], block_size: usize) -> Vec<u8>{
     bytes
 }
 
+fn find_blocksize(key: &[u8]) -> usize {
+    //feed identical bytes to find size
+    let mut input = [].to_vec();
+    let initial_size = aes_ecb_encrypt(&input, &key).len();
+    loop {
+        input.push(b'A');
+        let len = aes_ecb_encrypt(&input, &key).len();
+        //check if additional block is added
+        if len != initial_size {
+            return len - initial_size;
+        }
+    }
+    panic!("Couldn't find block size");
+}
+
+pub fn aes_decrypt(encrypted: &[u8]) -> Vec<u8>{
+    //assign random key to global variable
+    let random_key: [u8; 16] = rand::random();
+
+    //find block size
+    let block_size = find_blocksize(&random_key);
+
+    //find encryption mode -- I just use ECB because I didn't actually implement this :(
+    let encryption_mode = find_aes_encryption_mode(&encrypted);
+
+    //create dictionary of all responses for last byte
+    let mut block: [u8; 16] = [b'A'; 16];
+    let mut last_bytes = HashMap::new();
+    for byte in 0..=255 {
+        block[15] = byte;
+        last_bytes.insert(aes_ecb_decrypt(&block, &random_key), byte);
+    }
+
+    //match to an output where last byte of first_block = next byte of unknown string 
+    let mut outs: Vec<u8> = Vec::new();
+    for byte in encrypted {
+        block[15] = *byte;
+        let a = aes_ecb_decrypt(&block, &random_key);
+        let b = last_bytes[&a];
+        outs.push(b);
+    }
+
+    //return
+    outs
+}
 
 #[cfg(test)]
 mod tests {
