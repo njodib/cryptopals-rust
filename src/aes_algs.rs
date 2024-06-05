@@ -3,7 +3,6 @@ use aes::cipher::{generic_array::GenericArray, KeyInit, BlockDecrypt, BlockEncry
 use crate::xor::fixed_xor;
 use crate::utils::hex_encode;
 
-
 pub fn aes_ecb_decrypt(encrypted_bytes: &[u8], key_bytes: &[u8]) -> Vec<u8> {
     // Construct blocks of 16 byte size for AES-128
     let mut blocks = Vec::new();
@@ -45,15 +44,15 @@ pub fn aes_ecb_encrypt(plaintext_bytes: &[u8], key_bytes: &[u8]) -> Vec<u8> {
 }
 
 pub fn is_aes_ecb_encrypted(l: &[u8]) -> bool {
-
     //let l = encrypted_bytes;
+    let unencrypted = &pkcs_padding(&l, 16);
     let block_ct = l.len() / 16;
     
     //blocks of 16 bytes
     let blocks: Vec<Vec<u8>> = 
         (0..(block_ct-1))
         .into_iter()
-        .map(|i| l[(i*16)..((i+1)*16)].to_vec())
+        .map(|i| unencrypted[(i*16)..((i+1)*16)].to_vec())
         .collect();
 
     //compare blocks. if any blocks are equal, it is ECB encrypted
@@ -102,6 +101,7 @@ pub fn aes_cbc_decrypt(encrypted_bytes: &[u8], key_bytes: &[u8], iv_bytes: &[u8]
 
 pub fn aes_cbc_encrypt(plaintext_bytes: &[u8], key_bytes: &[u8], iv_bytes: &[u8]) -> Vec<u8> {
     //Initialize cipher as AES-128 with key and iv
+    let unencrypted = &pkcs_padding(&plaintext_bytes, 16);
     let key = GenericArray::clone_from_slice(key_bytes);
     let cipher = Aes128::new(&key);
     let mut iv = iv_bytes.to_vec();
@@ -110,8 +110,8 @@ pub fn aes_cbc_encrypt(plaintext_bytes: &[u8], key_bytes: &[u8], iv_bytes: &[u8]
     let mut blocks: Vec<u8> = Vec::new();
 
     //Step through encrypted bytes as a block of 16 bytes (4x4 matrix)
-    (0..((plaintext_bytes.len()/16) as usize)).step_by(16).for_each(|x| {
-        let plaintext: Vec<u8> = fixed_xor(&iv, &plaintext_bytes[x..x + 16].to_vec());
+    (0..((unencrypted.len()/16) as usize)).step_by(16).for_each(|x| {
+        let plaintext: Vec<u8> = fixed_xor(&iv, &unencrypted[x..x + 16].to_vec());
         let mut block = GenericArray::clone_from_slice(&plaintext);
         cipher.encrypt_block(&mut block);
         iv = Vec::new();
@@ -131,6 +131,16 @@ pub fn find_aes_encryption_mode(encrypted: &[u8]) -> String{
         false => "CBC".to_string(),
     }
 }
+
+fn pkcs_padding(message: &[u8], block_size: usize) -> Vec<u8>{
+    let mut bytes = message.to_vec();
+    let pad_ct = (block_size - (message.len() % block_size)) as u8;
+    for _ in 0..pad_ct {
+        bytes.push(pad_ct)
+    }
+    bytes
+}
+
 
 #[cfg(test)]
 mod tests {
