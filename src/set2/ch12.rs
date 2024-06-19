@@ -9,8 +9,6 @@
 //4) Make dictionary of every possible last byte (e.g. "AAAA", "AAAB", "AAAC", etc.)
 //5) Match output of one-byte-short input to dictionary entry. This is the first byte of unknown-string!
 //6) Repeat for remaining bytes
-use rand::{distributions::Uniform, Rng}; // 0.6.5
-use std::collections::HashMap;
 use crate::aes_algs::aes_decrypt;
 use base64_light::base64_decode;
 
