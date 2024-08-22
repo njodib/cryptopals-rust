@@ -170,6 +170,9 @@ pub fn aes_decrypt(encrypted: &[u8]) -> Vec<u8>{
 
     //find block size
     //let block_size = find_blocksize(&random_key);
+    //start at 0 through 15 and use 16 length blocks
+    //block length starts at m and has size n
+    
 
     //find encryption mode -- I just use ECB because I didn't actually implement this :(
     //let encryption_mode = find_aes_encryption_mode(&encrypted);
