@@ -1,6 +1,6 @@
 use std::env;
 
-use challenges::set1;
+use challenges::set01;
 use challenges::set2;
 //use challenges::ch10;
 
@@ -9,14 +9,14 @@ fn main() {
     for ch in challenge_indices(14){
         println!("\nCHALLENGE {} PRINTOUT:", ch);
         match ch {
-             1 => set1::ch01::print(),
-             2 => set1::ch02::print(),
-             3 => set1::ch03::print(),
-             4 => set1::ch04::print(),
-             5 => set1::ch05::print(),
-             6 => set1::ch06::print(),
-             7 => set1::ch07::print(),
-             8 => set1::ch08::print(),
+             1 => set01::ch01::print(),
+             2 => set01::ch02::print(),
+             3 => set01::ch03::print(),
+             4 => set01::ch04::print(),
+             5 => set01::ch05::print(),
+             6 => set01::ch06::print(),
+             7 => set01::ch07::print(),
+             8 => set01::ch08::print(),
              9 => set2::ch09::print(),
             10 => set2::ch10::print(),
             11 => set2::ch11::print(),
